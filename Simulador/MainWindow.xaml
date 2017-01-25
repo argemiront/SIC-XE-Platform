@@ -1,0 +1,756 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="Simulador.MainWindow"
+        Title="Simulador SIC e SIC/XE v0.9.7" Height="700" Width="1018" Background="Transparent" mc:Ignorable="d" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" Icon="Imagens/UIcon.png" ResizeMode="CanMinimize" MinWidth="1018" MinHeight="700" KeyDown="Window_KeyDown">
+	<Window.Resources>
+		<LinearGradientBrush x:Key="TextBoxBorder" EndPoint="0,20" StartPoint="0,0" MappingMode="Absolute">
+			<GradientStop Color="#ABADB3" Offset="0.05"/>
+			<GradientStop Color="#E2E3EA" Offset="0.07"/>
+			<GradientStop Color="#E3E9EF" Offset="1"/>
+		</LinearGradientBrush>
+		<Style x:Key="TextBoxStyle1" BasedOn="{x:Null}" TargetType="{x:Type TextBox}">
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+			<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+			<Setter Property="BorderBrush" Value="{StaticResource TextBoxBorder}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="1"/>
+			<Setter Property="AllowDrop" Value="true"/>
+			<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type TextBox}">
+						<ControlTemplate.Resources>
+							<Storyboard x:Key="Storyboard1">
+								<ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PART_ContentHost" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+									<SplineColorKeyFrame KeyTime="00:00:00.3000000" Value="#FF3DFF22"/>
+									<SplineColorKeyFrame KeyTime="00:00:01.2000000" Value="#013DFF22"/>
+								</ColorAnimationUsingKeyFrames>
+							</Storyboard>
+						</ControlTemplate.Resources>
+						<Microsoft_Windows_Themes:ListBoxChrome x:Name="Bd" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" RenderFocused="{TemplateBinding IsKeyboardFocusWithin}" RenderMouseOver="{TemplateBinding IsMouseOver}">
+							<ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+						</Microsoft_Windows_Themes:ListBoxChrome>
+						<ControlTemplate.Triggers>
+							<EventTrigger RoutedEvent="TextBoxBase.TextChanged">
+								<BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+							</EventTrigger>
+							<Trigger Property="IsEnabled" Value="false">
+								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+								<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="LabelStyle1" TargetType="{x:Type Label}">
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Padding" Value="5"/>
+			<Setter Property="HorizontalContentAlignment" Value="Left"/>
+			<Setter Property="VerticalContentAlignment" Value="Top"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Label}">
+						<ControlTemplate.Resources>
+							<Storyboard x:Key="Storyboard1">
+								<ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+									<SplineColorKeyFrame KeyTime="00:00:00.3000000" Value="#FF88FF2A"/>
+									<SplineColorKeyFrame KeyTime="00:00:01.3000000" Value="#0088FF2A"/>
+								</ColorAnimationUsingKeyFrames>
+							</Storyboard>
+						</ControlTemplate.Resources>
+						<Border x:Name="border" SnapsToDevicePixels="true" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" Background="Transparent">
+							<ContentPresenter x:Name="contentPresenter" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" RecognizesAccessKey="True" OpacityMask="Black"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsEnabled" Value="false">
+								<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+							</Trigger>
+							<Trigger Property="Content" Value="{x:Null}">
+								<Trigger.EnterActions>
+									<BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+								</Trigger.EnterActions>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Window.Resources>
+    <Grid x:Name="grid0">
+    	<Grid.RowDefinitions>
+    		<RowDefinition Height="80"/>
+    		<RowDefinition Height="0.857*"/>
+    	</Grid.RowDefinitions>
+        <Menu FlowDirection="LeftToRight" Foreground="White" Height="22" Margin="0,0,0,-0.649" x:Name="menu1" VerticalAlignment="Bottom">
+            <Menu.Background>
+                <LinearGradientBrush ColorInterpolationMode="ScRgbLinearInterpolation" EndPoint="0.5,0" MappingMode="RelativeToBoundingBox" Opacity="0.8" SpreadMethod="Pad" StartPoint="0.5,1">
+                    <GradientStop Color="Black" Offset="0.0" />
+                    <GradientStop Color="{DynamicResource {x:Static SystemColors.MenuColorKey}}" Offset="0.578" />
+                </LinearGradientBrush>
+            </Menu.Background>
+        	<MenuItem Foreground="Black" Header="_Arquivo" HorizontalAlignment="Stretch">
+        		<MenuItem Foreground="Black" Header="Montar cod. obj. (*.asm -&gt; *.sic)" x:Name="MenuMontarPP" ToolTip="Salvar arquivo objeto montado" Click="MenuMontarPP_Click"/>
+        		<Separator />
+        		<MenuItem x:Name="menuExportar" Header="Exportar mem. para  &quot;.mif&quot;" Foreground="Black" ToolTip="Exportar memória para DE2" Click="menuExportar_Click"/>
+        		<Separator/>
+        		<MenuItem Foreground="Black" Header="Sair" x:Name="menuSair" Click="menuSair_Click"/>
+        	</MenuItem>
+        	<MenuItem Header="E_xecutar" Foreground="Black">
+        		<MenuItem Foreground="Black" Header="Programa objeto do arquivo" x:Name="menuAbrir" Click="menuAbrir_Click"/>
+        		<Separator />
+        		<MenuItem Foreground="Black" Header="Contínuo" IsCheckable="True" IsChecked="False" x:Name="menuContinuo" Click="ModoOperacao"/>
+        		<MenuItem AlternationCount="0" Foreground="Black" Header="Passo-a-passo" IsCheckable="True" IsChecked="True" IsTextSearchEnabled="True" x:Name="menuPassoAPasso" Click="ModoOperacao"/>
+        	</MenuItem>
+        	<MenuItem Header="_Configurar" Foreground="Black">
+        		<MenuItem Foreground="Black" Header="Montador" x:Name="menuMontador" >
+        			<MenuItem Header="SIC Compatível" IsCheckable="True" Click="MenuItem_Click"/>
+        		</MenuItem>
+        		<MenuItem  x:Name="menuLoadDispIO" Header="Dispositivos de E/S" Foreground="Black" Click="menuLoadDispIO_Click"/>
+        		<MenuItem x:Name="menuLoadIO" Background="#00000000" Foreground="Black" Header="Arquivo de entrada de dados" Click="menuLoadIO_Click" Margin="0,0,-8.96,0"/>
+        	</MenuItem>
+        	<MenuItem Header="A_juda" Foreground="Black">
+        		<MenuItem Foreground="Black" Header="Como usar..." x:Name="menuAjuda" Click="menuAjuda_Click" />
+        		<Separator />
+        		<MenuItem Foreground="Black" Header="Sobre o sistema" Click="MenuItem_Click_1"/>
+        	</MenuItem>
+        </Menu>
+        <Image HorizontalAlignment="Left" x:Name="image1" Source="/Simulador;component/Imagens/ufersa.png" Stretch="Uniform" Width="137" Margin="12,0,0,34.351" />
+        <Label Content="Ciências da Computação" FontWeight="Bold" Height="28" Margin="155,0,278,0" x:Name="label2" Padding="3" VerticalAlignment="Top">
+        	<Label.Effect>
+        		<DropShadowEffect ShadowDepth="0" Direction="0" RenderingBias="Quality" Color="White"/>
+        	</Label.Effect>
+        </Label>
+    	<Label Content="Argemiro Neto e Silvio Fernandes" FontWeight="Bold" Margin="155,19,278,34.351" x:Name="label3" Padding="3">
+    		<Label.Effect>
+    			<DropShadowEffect ShadowDepth="0" Direction="0" RenderingBias="Quality" Color="White"/>
+    		</Label.Effect>
+    	</Label>
+    	<Grid Margin="0,1.324,0,0" Grid.Row="1">
+    		<Grid.Background>
+    			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    				<GradientStop Color="#FF4D4D4D" Offset="1"/>
+    				<GradientStop Color="#FFECECEC" Offset="0.315"/>
+    			</LinearGradientBrush>
+    		</Grid.Background>
+    		<GroupBox Margin="12,0,392.65,15.799" Header="Executando" VerticalAlignment="Bottom" Height="207.287" Foreground="White"/>
+    		<GroupBox Margin="12,162.968,392.65,246.313" Header="Instrução + Flags"/>
+    		<GroupBox HorizontalAlignment="Right" Margin="0,47.958,8,15.799" Width="380.65" Header="Memória">
+    			<Grid x:Name="MemGrid" Width="356.876" HorizontalAlignment="Left" Margin="7,10,0,8.3" ShowGridLines="True" Background="White">
+    				<Grid.RowDefinitions>
+    					<RowDefinition Height="0.05*" Focusable="True"/>
+    					<RowDefinition Height="0.05*" Focusable="True"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    					<RowDefinition Height="0.05*"/>
+    				</Grid.RowDefinitions>
+    				<Grid.ColumnDefinitions>
+    					<ColumnDefinition Width="0.1*"/>
+    					<ColumnDefinition Width="27"/>
+    					<ColumnDefinition Width="27"/>
+    					<ColumnDefinition Width="27"/>
+    					<ColumnDefinition Width="27"/>
+    					<ColumnDefinition Width="27"/>
+    					<ColumnDefinition Width="27"/>
+    					<ColumnDefinition Width="27"/>
+    					<ColumnDefinition Width="27"/>
+    					<ColumnDefinition Width="0.12*"/>
+    				</Grid.ColumnDefinitions>
+    				<Label Margin="0" Content="Offset" Padding="5,0,0,0" VerticalContentAlignment="Center"/>
+    				<Label HorizontalAlignment="Right" Margin="0" Width="27" Content="0" Grid.Column="1" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448"/>
+    				<Label HorizontalAlignment="Right" Margin="0" Width="27" Content="1" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2"/>
+    				<Label HorizontalAlignment="Right" Margin="0" Width="27" Content="2" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3"/>
+    				<Label HorizontalAlignment="Right" Margin="0" Width="27" Content="3" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4"/>
+    				<Label HorizontalAlignment="Right" Margin="0" Width="27" Content="4" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5"/>
+    				<Label HorizontalAlignment="Right" Margin="0" Width="27" Content="5" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6"/>
+    				<Label HorizontalAlignment="Right" Margin="0" Width="27" Content="6" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7"/>
+    				<Label HorizontalAlignment="Right" Margin="0" Width="27" Content="7" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8"/>
+    				<Label Content="ASCII" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center"/>
+    				<Label x:Name="l0E" Margin="0" Content="000000" Grid.Row="1" VerticalContentAlignment="Center" Padding="5,0,0,0" RenderTransformOrigin="0.544,1.34" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l00" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="1" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l01" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="1" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l02" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="1" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l03" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="1" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l04" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="1" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l05" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="1" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l06" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="1" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l07" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="1" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l0A" Content="FFFFFFFF" Grid.Column="9" Grid.Row="1" VerticalContentAlignment="Center" Padding="5,0,0,0" Style="{DynamicResource LabelStyle1}" Margin="0"/>
+    				<Label x:Name="l1E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="2"/>
+    				<Label x:Name="l10" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="2" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l11" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="2" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l12" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l13" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="2" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l14" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="2" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l15" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="2" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l16" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="2" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l17" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="2" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l1A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="2" Margin="0" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l2E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="3"/>
+    				<Label x:Name="l20" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="3" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l21" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="3" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l22" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="3" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l23" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="3" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l24" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="3" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l25" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="3" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l26" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="3" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l27" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="3" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l2A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="3" Margin="0" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l3E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="4"/>
+    				<Label x:Name="l30" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="4" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l31" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="4" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l32" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="4" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l33" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="4" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l34" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="4" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l35" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="4" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l36" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="4" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l37" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="4" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l3A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="4" Style="{DynamicResource LabelStyle1}" Margin="0" Height="24.5"/>
+    				<Label x:Name="l4E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="5"/>
+    				<Label x:Name="l40" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="5" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l41" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="5" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l42" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="5" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l43" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="5" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l44" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="5" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l45" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="5" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l46" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="5" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l47" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="5" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l4A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="5" Margin="0" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l5E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="6"/>
+    				<Label x:Name="l50" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="6" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l51" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="6" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l52" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="6" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l53" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="6" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l54" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="6" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l55" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="6" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l56" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="6" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l57" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="6" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l5A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="6" Margin="0" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l6E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="7"/>
+    				<Label x:Name="l60" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="7" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l61" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="7" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l62" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="7" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l63" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="7" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l64" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="7" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l65" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="7" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l66" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="7" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l67" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="7" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l6A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="7" VerticalAlignment="Top" Height="23.733" Style="{DynamicResource LabelStyle1}" Margin="0"/>
+    				<Label x:Name="l7E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="8"/>
+    				<Label x:Name="l70" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="8" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l71" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="8" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l72" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="8" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l73" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="8" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l74" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="8" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l75" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="8" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l76" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="8" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l77" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="8" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l7A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="8" Margin="0" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l8E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="9"/>
+    				<Label x:Name="l80" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="9" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l81" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="9" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l82" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="9" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l83" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="9" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l84" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="9" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l85" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="9" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l86" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="9" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l87" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="9" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l8A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="9" Margin="0" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l9E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="10"/>
+    				<Label x:Name="l90" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="10" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l91" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="10" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l92" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="10" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l93" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="10" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l94" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="10" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l95" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="10" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l96" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="10" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l97" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="10" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l9A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="10" Style="{DynamicResource LabelStyle1}" Margin="0"/>
+    				<Label x:Name="l10E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="11"/>
+    				<Label x:Name="l100" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="11" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l101" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="11" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l102" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="11" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l103" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="11" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l104" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="11" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l105" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="11" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l106" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="11" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l107" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="11" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l10A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="11" Margin="0" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l11E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="12"/>
+    				<Label x:Name="l110" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="12" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l111" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="12" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l112" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="12" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l113" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="12" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l114" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="12" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l115" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="12" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l116" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="12" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l117" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="12" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l11A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="12" Margin="0" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l12E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="13"/>
+    				<Label x:Name="l120" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="13" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l121" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="13" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l122" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="13" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l123" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="13" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l124" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="13" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l125" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="13" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l126" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="13" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l127" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="13" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l12A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="13" Margin="0" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l13E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="14"/>
+    				<Label x:Name="l130" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="14" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l131" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="14" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l132" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="14" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l133" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="14" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l134" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="14" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l135" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="14" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l136" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="14" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l137" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="14" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l13A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="14" Style="{DynamicResource LabelStyle1}" Margin="0"/>
+    				<Label x:Name="l14E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="15"/>
+    				<Label x:Name="l140" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="15" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l141" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="15" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l142" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="15" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l143" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="15" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l144" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="15" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l145" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="15" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l146" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="15" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l147" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="15" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l14A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="15" Margin="0" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l15E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="16"/>
+    				<Label x:Name="l150" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="16" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l151" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="16" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l152" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="16" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l153" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="16" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l154" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="16" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l155" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="16" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l156" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="16" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l157" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="16" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l15A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="16" Margin="0" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l16E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="17"/>
+    				<Label x:Name="l160" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="17" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l161" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="17" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l162" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="17" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l163" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="17" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l164" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="17" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l165" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="17" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l166" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="17" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l167" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="17" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l16A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="17" Style="{DynamicResource LabelStyle1}" Margin="0"/>
+    				<Label x:Name="l17E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="18"/>
+    				<Label x:Name="l170" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="18" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l171" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="18" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l172" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="18" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l173" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="18" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l174" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="18" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l175" Margin="-0.001,0,0,-0.218" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="18" Style="{DynamicResource LabelStyle1}" Height="24.5" HorizontalAlignment="Left"/>
+    				<Label x:Name="l176" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="18" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l177" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="18" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l17A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="18" Margin="0" Style="{DynamicResource LabelStyle1}" Height="24.5"/>
+    				<Label x:Name="l18E" Margin="0" Content="000000" Padding="5,0,0,0" VerticalContentAlignment="Center" RenderTransformOrigin="0.544,1.34" Grid.Row="19"/>
+    				<Label x:Name="l180" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="1" Grid.Row="19" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l181" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="2" Grid.Row="19" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l182" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="3" Grid.Row="19" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l183" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="4" Grid.Row="19" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l184" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="5" Grid.Row="19" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l185" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="6" Grid.Row="19" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l186" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="7" Grid.Row="19" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l187" Margin="0" Width="27" Content="FF" HorizontalContentAlignment="Center" Padding="0" VerticalContentAlignment="Center" RenderTransformOrigin="0.719,0.448" Grid.Column="8" Grid.Row="19" Style="{DynamicResource LabelStyle1}"/>
+    				<Label x:Name="l18A" Content="FFFFFFFF" Grid.Column="9" Padding="5,0,0,0" VerticalContentAlignment="Center" Grid.Row="19" Margin="0" Style="{DynamicResource LabelStyle1}"/>
+    			</Grid>
+    		</GroupBox>
+    		<ToolBar Height="30" Margin="0" x:Name="toolBar1" Opacity="1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="372.046">
+    			<ToolBar.Background>
+    				<LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+    					<GradientStop Color="White" Offset="0"/>
+    					<GradientStop Color="#FFFFFBFF" Offset="0.5"/>
+    					<GradientStop Color="#FFF7F7F7" Offset="1"/>
+    				</LinearGradientBrush>
+    			</ToolBar.Background>
+    			<Button Background="Transparent" BorderBrush="Transparent" Content="Play" FontSize="11" Height="21" HorizontalAlignment="Left" x:Name="btnPlay" VerticalAlignment="Center" Width="50" Click="Play"/>
+    			<Button Background="Transparent" BorderBrush="Transparent" ClickMode="Release" ClipToBounds="False" Content="Pause" FontSize="11" Height="21" HorizontalAlignment="Left" IsDefault="False" x:Name="btnPause" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="50" Click="Pause"/>
+    			<Button Background="Transparent" BorderBrush="Transparent" Content="Stop" FontSize="11" Height="21" HorizontalAlignment="Left" x:Name="btnStop" VerticalAlignment="Center" Width="50" Click="Stop"/>
+    			<Label Content="Tempo de passo (ms):" HorizontalContentAlignment="Stretch" Padding="4" Width="125" />
+    			<TextBox AcceptsTab="True" BorderBrush="SkyBlue" FontSize="11" HorizontalAlignment="Stretch" HorizontalContentAlignment="Right" Margin="0" MaxLines="1" x:Name="txbTempoPasso" Opacity="1" Padding="3" TextAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="51.197" Height="25" Text="0" IsEnabled="False" TextChanged="txbTempoPasso_TextChanged"/>
+    		</ToolBar>
+            <TextBox x:Name="txbA" HorizontalAlignment="Left" Margin="23.896,100.167,0,0" VerticalAlignment="Top" Width="51.227" Height="24.071" TextWrapping="Wrap" RenderTransformOrigin="2.049,0.474" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}"/>
+    		<TextBox x:Name="txbX" HorizontalAlignment="Left" Margin="87.123,100.167,0,0" VerticalAlignment="Top" Width="51.227" Height="24.071" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}"/>
+    		<TextBox x:Name="txbL" HorizontalAlignment="Left" Margin="151.35,100.167,0,0" VerticalAlignment="Top" Width="51.227" Height="24.071" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}"/>
+    		<TextBox x:Name="txbB" HorizontalAlignment="Left" Margin="214.831,100.167,0,0" VerticalAlignment="Top" Width="51.227" Height="24.071" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}"/>
+    		<TextBox x:Name="txbS" HorizontalAlignment="Left" Margin="278.152,100.167,0,0" VerticalAlignment="Top" Width="51.227" Height="24.071" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}"/>
+    		<TextBox x:Name="txbT" HorizontalAlignment="Left" Margin="341.379,100.167,0,0" VerticalAlignment="Top" Width="51.227" Height="24.071" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}"/>
+    		<TextBox x:Name="txbF" HorizontalAlignment="Left" Margin="404.606,100.167,0,0" VerticalAlignment="Top" Width="77.44" Height="24.071" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}" d:LayoutOverrides="HorizontalAlignment"/>
+    		<TextBox x:Name="txbPC" Margin="492.087,100.167,0,0" VerticalAlignment="Top" Height="24.071" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalAlignment="Left" Width="51.227" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}"/>
+    		<TextBox x:Name="txbSW" Margin="0,100.167,406.932,0" VerticalAlignment="Top" Height="24.071" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}" HorizontalAlignment="Right" Width="51.227"/>
+    		<Label HorizontalAlignment="Left" Margin="31.896,76.281,0,0" VerticalAlignment="Top" Width="36.44" Height="29.486" Content="A" HorizontalContentAlignment="Center"/>
+    		<Label HorizontalAlignment="Left" Margin="94.517,76.281,0,0" VerticalAlignment="Top" Width="36.439" Height="29.486" Content="X" HorizontalContentAlignment="Center"/>
+    		<Label HorizontalAlignment="Left" Margin="158.744,76.281,0,0" VerticalAlignment="Top" Width="36.44" Height="29.486" Content="L" HorizontalContentAlignment="Center"/>
+    		<Label HorizontalAlignment="Left" Margin="222.224,76.281,0,0" VerticalAlignment="Top" Width="36.44" Height="29.486" Content="B" HorizontalContentAlignment="Center"/>
+    		<Label HorizontalAlignment="Left" Margin="285.545,76.281,0,0" VerticalAlignment="Top" Width="36.44" Height="29.486" Content="S" HorizontalContentAlignment="Center"/>
+    		<Label HorizontalAlignment="Left" Margin="348.772,76.281,0,0" VerticalAlignment="Top" Width="36.44" Height="29.486" Content="T" HorizontalContentAlignment="Center"/>
+    		<Label HorizontalAlignment="Left" Margin="425.106,76.281,0,0" VerticalAlignment="Top" Width="36.44" Height="29.486" Content="F" HorizontalContentAlignment="Center" Background="#00000000"/>
+    		<Label Margin="499.48,76.281,476.08,0" VerticalAlignment="Top" Height="29.486" Content="PC" HorizontalContentAlignment="Center"/>
+    		<Label Margin="0,76.281,414.325,0" VerticalAlignment="Top" Height="29.486" Content="SW" HorizontalContentAlignment="Center" HorizontalAlignment="Right" Width="36.441"/>
+    		<TextBox x:Name="txbFN" HorizontalAlignment="Left" Margin="209.033,276.089,0,290.516" Width="36.44" TextWrapping="Wrap" RenderTransformOrigin="2.049,0.474" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}" Height="24.071"/>
+    		<TextBox x:Name="txbFI" HorizontalAlignment="Left" Margin="260.26,276.089,0,290.516" Width="36.44" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}" Height="24.071"/>
+    		<TextBox x:Name="txbFX" HorizontalAlignment="Left" Margin="311.487,276.089,0,290.516" Width="36.44" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}" Height="24.071"/>
+    		<TextBox x:Name="txbFB" HorizontalAlignment="Left" Margin="367.968,276.089,0,290.516" Width="36.44" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}" Height="24.071"/>
+    		<TextBox x:Name="txbFP" HorizontalAlignment="Left" Margin="418.289,276.089,0,290.516" Width="36.44" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}" Height="24.071"/>
+    		<TextBox x:Name="txbFE" Margin="466.516,276.089,0,290.516" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}" Width="36.44" Height="24.071" HorizontalAlignment="Left" d:LayoutOverrides="Width"/>
+    		<Label HorizontalAlignment="Left" Margin="209.033,0,0,266.787" Width="36.44" Content="N" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Height="24.486"/>
+    		<Label HorizontalAlignment="Left" Margin="260.26,0,0,266.787" Width="36.44" Content="I" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Height="24.486"/>
+    		<Label HorizontalAlignment="Left" Margin="311.487,0,0,266.787" Width="36.44" Content="X" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Height="24.486"/>
+    		<Label HorizontalAlignment="Left" Margin="367.968,0,0,266.787" Width="36.44" Content="B" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Height="24.486"/>
+    		<Label HorizontalAlignment="Left" Margin="418.289,0,0,266.787" Width="36.44" Content="P" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Height="24.486"/>
+    		<Label Margin="469.516,0,0,266.787" Content="E" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Height="24.486" HorizontalAlignment="Left" Width="30.44"/>
+    		<TextBox x:Name="txbInstrucao" Margin="131.379,276.089,0,290.516" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="61.851" d:LayoutOverrides="HorizontalAlignment" Style="{DynamicResource TextBoxStyle1}" Height="24.071"/>
+    		<Label Margin="131.379,0,0,266.787" Content="Instrução" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Height="24.486" HorizontalAlignment="Left" Width="61.851"/>
+    		<Label HorizontalAlignment="Left" Margin="23.896,0,0,117.028" Width="66.71" Content="Instrução:" VerticalAlignment="Bottom" Height="26.285" VerticalContentAlignment="Center" Foreground="White"/>
+    		<Label HorizontalAlignment="Left" Margin="23.896,0,0,86.743" Width="66.71" Content="Tamanho:" VerticalAlignment="Bottom" Height="26.285" Foreground="White" VerticalContentAlignment="Center"/>
+    		<Label HorizontalAlignment="Left" Margin="23.896,0,0,56.458" Width="98.87" Content="Endereçamento:" VerticalAlignment="Bottom" Height="26.285" Foreground="White" VerticalContentAlignment="Center"/>
+    		<Path HorizontalAlignment="Left" Margin="169.396,217.574,0,0" VerticalAlignment="Top" Width="115.873" Height="53.515" Data="M223.26872,217.57373 L75.123,268.906" StrokeThickness="2" StrokeEndLineCap="Triangle" Stretch="Fill" StrokeDashCap="Triangle" StrokeStartLineCap="Round">
+    			<Path.Fill>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.616"/>
+    					<GradientStop Color="White"/>
+    				</LinearGradientBrush>
+    			</Path.Fill>
+    			<Path.OpacityMask>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.OpacityMask>	
+    			<Path.Stroke>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.483"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Stroke>
+    		</Path>
+    		<Path HorizontalAlignment="Left" Margin="227.116,217.574,0,0" VerticalAlignment="Top" Width="69.584" Height="53.515" Data="M223.26872,217.57373 L75.123,268.906" StrokeThickness="2" StrokeEndLineCap="Triangle" Stretch="Fill" StrokeDashCap="Triangle" StrokeStartLineCap="Round">
+    			<Path.OpacityMask>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.OpacityMask>
+    			<Path.Stroke>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.483"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Stroke>
+    			<Path.Fill>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.616"/>
+    					<GradientStop Color="White"/>
+    				</LinearGradientBrush>
+    			</Path.Fill>
+    		</Path>
+    		<Path HorizontalAlignment="Left" Margin="279.269,217.574,0,0" VerticalAlignment="Top" Width="25.551" Height="53.515" Data="M223.26872,217.57373 L75.123,268.906" StrokeThickness="2" StrokeEndLineCap="Triangle" Stretch="Fill" StrokeDashCap="Triangle" StrokeStartLineCap="Round">
+    			<Path.OpacityMask>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.OpacityMask>
+    			<Path.Stroke>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.483"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Stroke>
+    			<Path.Fill>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.616"/>
+    					<GradientStop Color="White"/>
+    				</LinearGradientBrush>
+    			</Path.Fill>
+    		</Path>
+    		<Path HorizontalAlignment="Left" Margin="311.9,217.574,0,0" VerticalAlignment="Top" Width="20.048" Height="53.515" Data="M223.26872,217.57373 L75.123,268.906" StrokeThickness="2" StrokeEndLineCap="Triangle" Stretch="Fill" StrokeDashCap="Triangle" StrokeStartLineCap="Round" RenderTransformOrigin="0.5,0.5">
+    			<Path.OpacityMask>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.OpacityMask>
+    			<Path.Stroke>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.483"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Stroke>
+    			<Path.Fill>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.616"/>
+    					<GradientStop Color="White"/>
+    				</LinearGradientBrush>
+    			</Path.Fill>
+    			<Path.RenderTransform>
+    				<TransformGroup>
+    					<ScaleTransform ScaleX="-1"/>
+    					<SkewTransform/>
+    					<RotateTransform/>
+    					<TranslateTransform/>
+    				</TransformGroup>
+    			</Path.RenderTransform>
+    		</Path>
+    		<Path HorizontalAlignment="Left" Margin="320.499,217.574,0,0" VerticalAlignment="Top" Width="66.049" Height="53.515" Data="M223.26872,217.57373 L75.123,268.906" StrokeThickness="2" StrokeEndLineCap="Triangle" Stretch="Fill" StrokeDashCap="Triangle" StrokeStartLineCap="Round" RenderTransformOrigin="0.5,0.5">
+    			<Path.OpacityMask>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.OpacityMask>
+    			<Path.Stroke>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.483"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Stroke>
+    			<Path.Fill>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.616"/>
+    					<GradientStop Color="White"/>
+    				</LinearGradientBrush>
+    			</Path.Fill>
+    			<Path.RenderTransform>
+    				<TransformGroup>
+    					<ScaleTransform ScaleX="-1"/>
+    					<SkewTransform/>
+    					<RotateTransform/>
+    					<TranslateTransform/>
+    				</TransformGroup>
+    			</Path.RenderTransform>
+    		</Path>
+    		<Path HorizontalAlignment="Left" Margin="332.45,217.574,0,0" VerticalAlignment="Top" Width="104.048" Height="53.515" Data="M223.26872,217.57373 L75.123,268.906" StrokeThickness="2" StrokeEndLineCap="Triangle" Stretch="Fill" StrokeDashCap="Triangle" StrokeStartLineCap="Round" RenderTransformOrigin="0.5,0.5">
+    			<Path.OpacityMask>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.OpacityMask>
+    			<Path.Stroke>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.483"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Stroke>
+    			<Path.Fill>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.616"/>
+    					<GradientStop Color="White"/>
+    				</LinearGradientBrush>
+    			</Path.Fill>
+    			<Path.RenderTransform>
+    				<TransformGroup>
+    					<ScaleTransform ScaleX="-1"/>
+    					<SkewTransform/>
+    					<RotateTransform/>
+    					<TranslateTransform/>
+    				</TransformGroup>
+    			</Path.RenderTransform>
+    		</Path>
+    		<Path HorizontalAlignment="Left" Margin="343.731,217.574,0,0" VerticalAlignment="Top" Width="144.382" Height="53.515" Data="M223.26872,217.57373 L75.123,268.906" StrokeThickness="2" StrokeEndLineCap="Triangle" Stretch="Fill" StrokeDashCap="Triangle" StrokeStartLineCap="Round" RenderTransformOrigin="0.5,0.5">
+    			<Path.OpacityMask>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.OpacityMask>
+    			<Path.Stroke>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.483"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Stroke>
+    			<Path.Fill>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.616"/>
+    					<GradientStop Color="White"/>
+    				</LinearGradientBrush>
+    			</Path.Fill>
+    			<Path.RenderTransform>
+    				<TransformGroup>
+    					<ScaleTransform ScaleX="-1"/>
+    					<SkewTransform/>
+    					<RotateTransform/>
+    					<TranslateTransform/>
+    				</TransformGroup>
+    			</Path.RenderTransform>
+    		</Path>
+    		<TextBox x:Name="txbInstLoaded" HorizontalAlignment="Left" Margin="265.211,194.6,0,0" VerticalAlignment="Top" Width="93.826" Height="24.071" TextWrapping="Wrap" RenderTransformOrigin="2.049,0.474" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle1}"/>
+    		<Path x:Name="pc2" Stretch="Fill" StrokeEndLineCap="Triangle" StrokeThickness="2" Margin="0,155.951,381.1,0" VerticalAlignment="Top" Height="2" Data="M411.524,142.551 L495.35,142.551" HorizontalAlignment="Right" Width="113.376">
+    			<Path.Stroke>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<LinearGradientBrush.RelativeTransform>
+    						<TransformGroup>
+    							<ScaleTransform CenterX="0.5" CenterY="0.5"/>
+    							<SkewTransform CenterX="0.5" CenterY="0.5"/>
+    							<RotateTransform Angle="-90" CenterX="0.5" CenterY="0.5"/>
+    							<TranslateTransform/>
+    						</TransformGroup>
+    					</LinearGradientBrush.RelativeTransform>
+    					<GradientStop Color="Black" Offset="0.233"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Stroke>
+    			<Path.Fill>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<LinearGradientBrush.RelativeTransform>
+    						<TransformGroup>
+    							<ScaleTransform CenterX="0.5" CenterY="0.5"/>
+    							<SkewTransform CenterX="0.5" CenterY="0.5"/>
+    							<RotateTransform Angle="90" CenterX="0.5" CenterY="0.5"/>
+    							<TranslateTransform/>
+    						</TransformGroup>
+    					</LinearGradientBrush.RelativeTransform>
+    					<GradientStop Color="Black" Offset="0.254"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Fill>
+    		</Path>
+    		<Path Stretch="Fill" StrokeEndLineCap="Triangle" StrokeThickness="2" Margin="363.434,206.25,380.367,0" VerticalAlignment="Top" Height="2" Data="M411.524,142.551 L495.35,142.551" RenderTransformOrigin="0.5,0.5">
+    			<Path.Stroke>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<LinearGradientBrush.RelativeTransform>
+    						<TransformGroup>
+    							<ScaleTransform CenterX="0.5" CenterY="0.5"/>
+    							<SkewTransform CenterX="0.5" CenterY="0.5"/>
+    							<RotateTransform Angle="-90" CenterX="0.5" CenterY="0.5"/>
+    							<TranslateTransform/>
+    						</TransformGroup>
+    					</LinearGradientBrush.RelativeTransform>
+    					<GradientStop Color="Black" Offset="0.483"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Stroke>
+    			<Path.Fill>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<LinearGradientBrush.RelativeTransform>
+    						<TransformGroup>
+    							<ScaleTransform CenterX="0.5" CenterY="0.5"/>
+    							<SkewTransform CenterX="0.5" CenterY="0.5"/>
+    							<RotateTransform Angle="90" CenterX="0.5" CenterY="0.5"/>
+    							<TranslateTransform/>
+    						</TransformGroup>
+    					</LinearGradientBrush.RelativeTransform>
+    					<GradientStop Color="Black" Offset="0.384"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Fill>
+    			<Path.RenderTransform>
+    				<TransformGroup>
+    					<ScaleTransform ScaleX="-1"/>
+    					<SkewTransform/>
+    					<RotateTransform/>
+    					<TranslateTransform/>
+    				</TransformGroup>
+    			</Path.RenderTransform>
+    		</Path>
+    		<TextBox x:Name="txbInstrucao_Copy" Margin="205.95,0,0,174.3" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="85.88" VerticalAlignment="Bottom" Height="24.071" d:LayoutOverrides="HorizontalAlignment" Style="{DynamicResource TextBoxStyle1}"/>
+    		<Label Margin="205.95,0,0,145.571" Content="Instrução" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Height="29.486" HorizontalAlignment="Left" Width="85.88" Foreground="White"/>
+    		<TextBox x:Name="txbParamLoaded" Margin="305.179,0,0,174.3" RenderTransformOrigin="2.049,0.474" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="131.494" VerticalAlignment="Bottom" Height="24.071" d:LayoutOverrides="HorizontalAlignment" Style="{DynamicResource TextBoxStyle1}"/>
+    		<Label Margin="305.179,0,0,145.571" Content="Parâmetro" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Height="29.486" HorizontalAlignment="Left" Width="131.494" Foreground="White"/>
+    		<Path HorizontalAlignment="Left" Margin="164.749,0,0,198.38" Width="85.164" Data="M223.26872,217.57373 L75.123,268.906" StrokeThickness="2" StrokeEndLineCap="Triangle" Stretch="Fill" StrokeDashCap="Triangle" StrokeStartLineCap="Round" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Bottom" Height="64.721">
+    			<Path.OpacityMask>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.OpacityMask>
+    			<Path.Stroke>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.483"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Stroke>
+    			<Path.Fill>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<GradientStop Color="Black" Offset="0.616"/>
+    					<GradientStop Color="White"/>
+    				</LinearGradientBrush>
+    			</Path.Fill>
+    			<Path.RenderTransform>
+    				<TransformGroup>
+    					<ScaleTransform ScaleX="-1"/>
+    					<SkewTransform/>
+    					<RotateTransform/>
+    					<TranslateTransform/>
+    				</TransformGroup>
+    			</Path.RenderTransform>
+    		</Path>
+    		<Path Stretch="Fill" StrokeEndLineCap="Triangle" StrokeThickness="2" Margin="443.26,0,380.367,185.21" Data="M411.524,142.551 L495.35,142.551" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Bottom" Height="2">
+    			<Path.Stroke>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<LinearGradientBrush.RelativeTransform>
+    						<TransformGroup>
+    							<ScaleTransform CenterX="0.5" CenterY="0.5"/>
+    							<SkewTransform CenterX="0.5" CenterY="0.5"/>
+    							<RotateTransform Angle="-90" CenterX="0.5" CenterY="0.5"/>
+    							<TranslateTransform/>
+    						</TransformGroup>
+    					</LinearGradientBrush.RelativeTransform>
+    					<GradientStop Color="Black" Offset="0.483"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Stroke>
+    			<Path.Fill>
+    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+    					<LinearGradientBrush.RelativeTransform>
+    						<TransformGroup>
+    							<ScaleTransform CenterX="0.5" CenterY="0.5"/>
+    							<SkewTransform CenterX="0.5" CenterY="0.5"/>
+    							<RotateTransform Angle="90" CenterX="0.5" CenterY="0.5"/>
+    							<TranslateTransform/>
+    						</TransformGroup>
+    					</LinearGradientBrush.RelativeTransform>
+    					<GradientStop Color="Black" Offset="0.384"/>
+    					<GradientStop Color="White" Offset="1"/>
+    				</LinearGradientBrush>
+    			</Path.Fill>
+    			<Path.RenderTransform>
+    				<TransformGroup>
+    					<ScaleTransform ScaleX="-1"/>
+    					<SkewTransform/>
+    					<RotateTransform/>
+    					<TranslateTransform/>
+    				</TransformGroup>
+    			</Path.RenderTransform>
+    		</Path>
+    		<Label HorizontalAlignment="Left" Margin="23.896,0,0,26.173" Width="98.87" Content="Comentário:" VerticalAlignment="Bottom" Height="26.285" Foreground="White" VerticalContentAlignment="Center"/>
+    		<Label HorizontalAlignment="Left" Margin="96.08,0,0,117.028" Width="88.393" VerticalAlignment="Bottom" Height="26.285" VerticalContentAlignment="Center" Foreground="White" x:Name="lblInstrucao" />
+    		<Label HorizontalAlignment="Left" Margin="96.08,0,0,86.743" Width="66.71" VerticalAlignment="Bottom" Height="26.285" Foreground="White" VerticalContentAlignment="Center" x:Name="lblTamanho" />
+    		<Label Margin="126.35,0,406.932,56.458" VerticalAlignment="Bottom" Height="26.285" Foreground="White" VerticalContentAlignment="Center" x:Name="lblModoEnd" />
+    		<Label Margin="108.396,0,402.932,26.173" VerticalAlignment="Bottom" Height="26.285" Foreground="White" VerticalContentAlignment="Center" x:Name="lblComent" />
+    		<ToolBar Margin="376.046,0,402.932,0" VerticalAlignment="Top" Height="30">
+    			<Label Content="Offset da memória:"/>
+    			<TextBox x:Name="txbOffset" HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Width="64" BorderBrush="SkyBlue" TextWrapping="Wrap" TextChanged="txbOffset_TextChanged" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Text="0"/>
+    		</ToolBar>
+            <GroupBox Margin="12,47.958,392.65,0" VerticalAlignment="Top" Height="95.593" Header="                              ">
+    			<Expander x:Name="expRegs" HorizontalAlignment="Left" Margin="2,-19.5,0,13.04" Width="104.842" Header="Registradores" Foreground="Black" ScrollViewer.CanContentScroll="True" Background="#00000000">
+    				<StackPanel Background="#FFECECEC" Height="54.093">
+    					<RadioButton Margin="0" Content="ASCII" d:LayoutOverrides="Width" VerticalAlignment="Top" Height="17.5" Checked="BaseRegChanged"/>
+    					<RadioButton Margin="0" Content="DEC" d:LayoutOverrides="Width" VerticalAlignment="Top" Height="17.5" Checked="BaseRegChanged"/>
+    					<RadioButton Margin="0" Content="HEX" d:LayoutOverrides="Width" VerticalAlignment="Top" Height="18.361" IsChecked="True" Checked="BaseRegChanged"/>
+    				</StackPanel>
+    			</Expander>
+    		</GroupBox>
+    		<Path x:Name="pc1" Stroke="Black" Fill="Black" Stretch="Fill" StrokeStartLineCap="Round" StrokeThickness="2" Margin="0,122.946,492.476,0" VerticalAlignment="Top" Height="36.022" Data="M410.52436,123.94591 L410.52436,141.55114" HorizontalAlignment="Right" Width="2"/>
+    	</Grid>
+    </Grid>
+</Window>

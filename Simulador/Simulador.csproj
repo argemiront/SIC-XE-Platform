@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{84DCEDE8-586C-4931-A77D-D479AB5A0F94}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Simulador</RootNamespace>
+    <AssemblyName>Simulador</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <Utf8Output>true</Utf8Output>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon1.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Expression.Effects" />
+    <Reference Include="Microsoft.Expression.Interactions" />
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Windows.Interactivity" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>v4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ControladorES.cs" />
+    <Compile Include="Instruções\AADF.cs" />
+    <Compile Include="Instruções\ADD.cs" />
+    <Compile Include="Instruções\ADDR.cs" />
+    <Compile Include="Instruções\AND.cs" />
+    <Compile Include="Instruções\CLEAR.cs" />
+    <Compile Include="Instruções\COMP.cs" />
+    <Compile Include="Instruções\COMPF.cs" />
+    <Compile Include="Instruções\COMPR.cs" />
+    <Compile Include="Instruções\DIV.cs" />
+    <Compile Include="Instruções\DIVF.cs" />
+    <Compile Include="Instruções\DIVR.cs" />
+    <Compile Include="Instruções\FIX.cs" />
+    <Compile Include="Instruções\FLOAT.cs" />
+    <Compile Include="Instruções\HIO.cs" />
+    <Compile Include="Instruções\J.cs" />
+    <Compile Include="Instruções\JEQ.cs" />
+    <Compile Include="Instruções\JGT.cs" />
+    <Compile Include="Instruções\JLT.cs" />
+    <Compile Include="Instruções\JSUB.cs" />
+    <Compile Include="Instruções\LDA.cs" />
+    <Compile Include="Instruções\LDB.cs" />
+    <Compile Include="Instruções\LDCH.cs" />
+    <Compile Include="Instruções\LDF.cs" />
+    <Compile Include="Instruções\LDL.cs" />
+    <Compile Include="Instruções\LDS.cs" />
+    <Compile Include="Instruções\LDT.cs" />
+    <Compile Include="Instruções\LDX.cs" />
+    <Compile Include="Instruções\LPS.cs" />
+    <Compile Include="Instruções\MUL.cs" />
+    <Compile Include="Instruções\MULF.cs" />
+    <Compile Include="Instruções\MULR.cs" />
+    <Compile Include="Instruções\OR.cs" />
+    <Compile Include="Instruções\RD.cs" />
+    <Compile Include="Instruções\RMO.cs" />
+    <Compile Include="Instruções\RSUB.cs" />
+    <Compile Include="Instruções\SetInstrucoes.cs" />
+    <Compile Include="Instruções\SHIFTL.cs" />
+    <Compile Include="Instruções\SHIFTR.cs" />
+    <Compile Include="Instruções\SIO.cs" />
+    <Compile Include="Instruções\SSK.cs" />
+    <Compile Include="Instruções\STA.cs" />
+    <Compile Include="Instruções\STB.cs" />
+    <Compile Include="Instruções\STCH.cs" />
+    <Compile Include="Instruções\STF.cs" />
+    <Compile Include="Instruções\STI.cs" />
+    <Compile Include="Instruções\STL.cs" />
+    <Compile Include="Instruções\STS.cs" />
+    <Compile Include="Instruções\STSW.cs" />
+    <Compile Include="Instruções\STT.cs" />
+    <Compile Include="Instruções\STX.cs" />
+    <Compile Include="Instruções\SUB.cs" />
+    <Compile Include="Instruções\SUBF.cs" />
+    <Compile Include="Instruções\SUBR.cs" />
+    <Compile Include="Instruções\SVC.cs" />
+    <Compile Include="Instruções\TD.cs" />
+    <Compile Include="Instruções\TIO.cs" />
+    <Compile Include="Instruções\TIX.cs" />
+    <Compile Include="Instruções\TIXR.cs" />
+    <Compile Include="Instruções\WD.cs" />
+    <Compile Include="LinkLoader.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Memoria.cs" />
+    <Compile Include="Montador.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Resource1.Designer.cs" />
+    <Compile Include="Sobre.xaml.cs">
+      <DependentUpon>Sobre.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ULA.cs" />
+    <Compile Include="Word.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource1.resx" />
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Sobre.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Imagens\ufersa.png" />
+    <Resource Include="Imagens\ufersa_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Imagens\UIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon1.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
